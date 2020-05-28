@@ -1,2 +1,2 @@
 def test():
-    assert True == True, 'test method'
+    assert True == False, 'test method'
