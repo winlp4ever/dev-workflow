@@ -48,12 +48,12 @@ jobs:
       id: cache-npm-pkgs
       uses: actions/cache@v2
       with:
-        path: |
-          ~/.npm
-          **/node_modules
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        path: ~/.npm
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
-          ${{ runner.os }}-node-
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
     - name: Install npm packages
       if: steps.cache-npm-pkgs.outputs.cache-hit != 'true'
       run: npm install
