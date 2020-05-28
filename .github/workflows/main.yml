@@ -16,13 +16,16 @@ jobs:
         architecture: 'x64' 
     - name: Display Python version
       run: python -c "import sys; print(sys.version)"
-    - uses: actions/cache@v2
+    - name: Cache pip packages
+      id: cache-pip-pkgs
+      uses: actions/cache@v2
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
     - name: Install Dependencies
+      if: steps.cache-pip-pkgs.outputs.cache-hit != 'true'
       run: pip install -r requirements.txt
     - name: Run Python tests
       run: |
