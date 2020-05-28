@@ -9,8 +9,13 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    
+    strategy:
+      matrix:
+        node-version: [8.x, 10.x, 12.x]
+    
     steps:
+    # Set up Python env
     - uses: actions/checkout@v2
     - name: Set up Python 3.8
       uses: actions/setup-python@v2
@@ -33,3 +38,24 @@ jobs:
     - name: Run Python tests
       run: |
         pytest
+    # Set up npm env
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Cache npm pkgs
+      id: cache-npm-pkgs
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - name: Install npm packages
+      if: steps.cache-npm-pkgs.outputs.cache-hit != 'true'
+      run: npm install
+    - run: npm run build --if-present
+    - run: npm test
+      env:
+        CI: true
