@@ -17,7 +17,7 @@ jobs:
     steps:
     # Install Ubuntu packages
     - name: Install db services
-    - run: sudo apt-get install libpq-dev
+      run: sudo apt-get install libpq-dev
     # Set up Python env
     - uses: actions/checkout@v2
     - name: Set up Python 3.8
