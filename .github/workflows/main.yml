@@ -25,7 +25,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
     - name: Install Dependencies
-      if: steps.cache-pip-pkgs.outputs.cache-hit != 'true'
+      # if: steps.cache-pip-pkgs.outputs.cache-hit != 'true'
       run: pip install -r requirements.txt
     - name: Run Python tests
       run: |
